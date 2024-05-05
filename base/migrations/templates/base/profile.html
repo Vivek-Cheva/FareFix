@@ -1,0 +1,121 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<main class="profile-page layout layout--3">
+  <div class="container">
+    <!-- Topics Start -->
+    {% include 'base/topics_component.html' %}
+    <!-- Topics End -->
+
+    <!-- Room List Start -->
+    <div class="scroller" style = "height:100vh; overflow-y: scroll;  -ms-overflow-style: none; scrollbar-width: none;">
+
+    
+    <div class="roomList">
+      <div class="profile">
+        <div class="profile__avatar">
+          <div class="avatar avatar--large active">
+            <img src="{{user.avatar.url}}" />
+          </div>
+        </div>
+        <div class="profile__info">
+          <h3>{{user.name}}</h3>
+          <p>@{{user.username}}</p>
+          {% if request.user == user %}
+          <a href="{% url 'update-user' %}" class="btn btn--main btn--pill">Edit Profile</a>
+          {% endif %}
+        </div>
+        <div class="profile__about">
+          <h3>About</h3>
+          <p>
+            {{user.bio}}
+          </p>
+        </div>
+      </div>
+      <div class="booking-box">
+        {%if request.user == user%}
+        <h2>Bookings:</h2>
+  {%for booking in bookings %}
+  <div style="display: flex; justify-content:space-between; padding:5px 5px; border:1.5px solid rgb(136, 134, 134); margin:5px; border-radius:5px">
+
+    <p><b>{{booking.room.topic}}</b> is booked by <b>{{booking.customer}}</b> for 'Rs.{{booking.finalprice}}'</p>
+    <a href="{% url 'alter-status' booking.id %}">
+      {%if booking.status == 0%}
+
+      <div class="cancel" style="display: inline-block;">Mark As Done</div>
+      {%else%}
+      <div class="cancel" style="display: inline-block;">Done</div>
+      {%endif%}
+    </a>
+  </div>
+  {%endfor%}
+      </div>
+      <div class="orders-box">
+      <h2>Orders:</h2>
+  {%for order in orders %}
+  <div style="display: flex; justify-content:space-between; padding:5px 5px; border:1.5px solid rgb(136, 134, 134); margin:5px; border-radius:5px">
+
+    <p>you ordered <b>{{order.room.topic}} </b>for 'Rs.{{order.finalprice}}'</p>
+    <a href="{% url 'delete-order' order.id %}">
+      <div class="cancel" style="display: inline-block;">Cancel</div>
+    </a>
+  </div>
+  {%endfor%}
+  {%endif%}
+      </div>
+      <div class="roomList__header">
+        <div>
+          <h2>Services Hosted by {{user.username}}</a>
+          </h2>
+        </div>
+      </div>
+
+      {% for room in rooms %}
+  <!-- <h1>{{user.username}}</h1>
+  <h1>{{room.host.username}}</h1> -->
+     {%if user.username == room.host.username %}
+      <div class="roomListRoom">
+          <div class="roomListRoom__header">
+              <a href="{% url 'user-profile' room.host.id %}" class="roomListRoom__author">
+                  <div class="avatar avatar--small">
+                      <img src="{{room.host.avatar.url}}" />
+                  </div>
+                  <span>@{{room.host.username}}</span>
+              </a>
+              <div class="roomListRoom__actions">
+                  <span>{{room.created|timesince}} ago</span>
+              </div>
+          </div>
+          <div class="roomListRoom__content">
+              <a href="{% url 'room' room.id %}">{{room.name}}</a>
+          </div>
+          <div class="roomListRoom__content" id="room_desc">
+              <a href="{% url 'room' room.id %}" style="font-size: 16px; font-weight: 500; color:rgb(167, 163, 163);">Lorem
+                  ipsum dolor sit amet consectetur adipisicing elit. Soluta error perferendis similique exercitationem
+                  repudiandae nihil? Modi esse iure sint nihil in, at saepe, non ratione culpa similique possimus quod
+                  libero?</a>
+          </div>
+          <div class="roomListRoom__meta">
+            <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
+              
+              <h1 style="font-size: 18px;"><span style='font-size:18px; color:#B2BDBD;'>&#8377;</span> {{room.price}} </h1>
+            </a>
+            <p class="roomListRoom__topic">{{room.topic.name}}</p>
+            <p class="roomListRoom__topic">  <a href="{% url 'book' room.id %}" class="roomListRoom__joined">Book</a></p>
+            
+          </div>
+        </div>
+        {%endif%}
+        {% endfor %}
+        
+        
+      </div>
+    </div>
+    <!-- Room List End -->
+
+    <!-- Activities Start -->
+    {% include 'base/activity_component.html' %}
+    <!-- Activities End -->
+  </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,37 @@
+<div style=" height:100vh; overflow-y: scroll;  -ms-overflow-style: none; scrollbar-width: none; ">
+
+    {% for room in rooms %}
+    {% load static %}  
+    <div class="roomListRoom">
+    <div class="roomListRoom__header">
+        <a href="{% url 'user-profile' room.host.id %}" class="roomListRoom__author">
+            <div class="avatar avatar--small">
+                <img src="{{room.host.avatar.url}}" />
+            </div>
+            <span>@{{room.host.username}}</span>
+        </a>
+        <div class="roomListRoom__actions">
+            <span>{{room.created|timesince}} ago</span>
+        </div>
+    </div>
+    <div class="roomListRoom__content">
+        <a href="{% url 'room' room.id %}">{{room.name}}</a>
+    </div>
+    <div class="roomListRoom__content" id="room_desc">
+        <a href="{% url 'room' room.id %}" style="font-size: 16px; font-weight: 500; color:rgb(167, 163, 163);">Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Soluta error perferendis similique exercitationem
+            repudiandae nihil? Modi esse iure sint nihil in, at saepe, non ratione culpa similique possimus quod
+            libero?</a>
+        </div>
+        <div class="roomListRoom__meta">
+            <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
+           
+       <h1 style="font-size: 18px;"><span style='font-size:18px; color:#B2BDBD;'>&#8377;</span> {{room.price}} </h1>
+        </a>
+        <p class="roomListRoom__topic">{{room.topic.name}}</p>
+        <p class="roomListRoom__topic" style="background-color: #71c6dd; border:1px solid white; ">  <a href="{% url 'book' room.id %}" class="roomListRoom__joined" style="color:#3f4156; font-weight:600;"><img src="{% static 'images/reservation-icon.png' %}" height="20px"  width="auto">Book</a></p>
+        
+    </div>
+</div>
+{% endfor %}
+</div>
